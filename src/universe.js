@@ -1,16 +1,19 @@
 var Universe = function() {
   Universe.G = 100;
   function Universe() {
-    this.mouseUp = __bind(this.mouseUp, this);
-    this.mouseMove = __bind(this.mouseMove, this);
-    this.mouseDown = __bind(this.mouseDown, this);
-    this.keyPress = __bind(this.keyPress, this);    this.pixelsPerUnit = 1;
+    this.up = __bind(this.up, this);
+    this.move = __bind(this.move, this);
+    this.down = __bind(this.down, this);
+    this.keyPress = __bind(this.keyPress, this);    
+	this.pixelsPerUnit = 1;
     this.children = [];
     this.arrow = null;
     this.follower = -1;
     this.screen = new Screen(this, '#000000');
-    this.screen.canvas.onmousedown = this.mouseDown;
-    this.screen.canvas.onmouseup = this.mouseUp;
+    this.screen.canvas.onmousedown = this.down;
+    this.screen.canvas.onmouseup = this.up;
+	this.screen.canvas.ontouchstart = this.down;
+    this.screen.canvas.ontouchend = this.up;
     document.onkeydown = this.keyPress;
     this.offset = new Vector();
     this.screen.run();
@@ -93,18 +96,23 @@ var Universe = function() {
     }
     return _results;
   };
-  Universe.prototype.mouseDown = function(e) {
-    this.screen.canvas.onmousemove = this.mouseMove;
+  Universe.prototype.down = function(e) {
+	if (!e)
+		e = event
+	e.preventDefault()
+    this.screen.canvas.onmousemove = this.move;
+	this.screen.canvas.ontouchmove = this.move;
     this.arrow = new Object();
     this.arrow.start = Screen.getCoordinates(e);
     return this.arrow.end = Screen.getCoordinates(e);
   };
-  Universe.prototype.mouseMove = function(e) {
+  Universe.prototype.move = function(e) {
     return this.arrow.end = Screen.getCoordinates(e);
   };
-  Universe.prototype.mouseUp = function(e) {
+  Universe.prototype.up = function(e) {
     var diff;
     this.screen.canvas.onmousemove = null;
+	this.screen.canvas.ontouchmove = null;
     diff = this.arrow.start.sub(this.arrow.end).div(this.pixelsPerUnit * 50);
     this.children.push(new Body(this, 100 / (this.pixelsPerUnit * this.pixelsPerUnit), this.arrow.start.sub(this.offset).div(this.pixelsPerUnit), diff, 5 / this.pixelsPerUnit));
     return this.arrow = null;
