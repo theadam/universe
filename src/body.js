@@ -16,7 +16,10 @@ var Body = function() {
     var distance, force, xDistance, xForce, yDistance, yForce;
     xDistance = this.position.x - body.position.x;
     yDistance = this.position.y - body.position.y;
-    distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+    if(xDistance > 2000 || yDistance > 2000){
+		return;
+	}
+	distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
     force = Universe.G * ((this.mass + body.mass) / (distance * distance));
     xForce = xDistance / distance * force;
     yForce = yDistance / distance * force;
@@ -55,8 +58,8 @@ var Body = function() {
   Body.prototype.update = function(timeDiff) {
     var _results;
     this.path.unshift(new Vector(this.position.x, this.position.y));
-    this.position.x += this.speed.x;
-    this.position.y += this.speed.y;
+    this.position.x += this.speed.x * timeDiff;
+    this.position.y += this.speed.y * timeDiff;
     _results = [];
     while (this.path.length > Body.TRAIL_LENGTH) {
       _results.push(this.path.pop());

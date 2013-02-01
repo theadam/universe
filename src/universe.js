@@ -54,7 +54,7 @@ var Universe = function() {
     _ref = this.children;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       child = _ref[_i];
-      child.update(timeDiff);
+      child.update(timeDiff / (1000/this.screen.framerate));
     }
     this.offset.x = this.screen.size.x / 2;
     this.offset.y = this.screen.size.y / 2;
@@ -82,7 +82,7 @@ var Universe = function() {
       return this.pixelsPerUnit *= 2;
     } else if (e.keyCode === 40) {
       return this.pixelsPerUnit /= 2;
-    } else if (e.charCode === 116) {
+    } else if (e.keyCode === 84) {
       return Body.DRAW_TRAILS = !Body.DRAW_TRAILS;
     }
   };

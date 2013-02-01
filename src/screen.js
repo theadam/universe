@@ -12,7 +12,7 @@ var Screen = function() {
     document.body.style.overflow = "hidden";
     this.canvas = document.createElement('canvas');
     document.body.appendChild(this.canvas);
-    this.framerate = 60;
+    this.framerate = 40;
     this.clear = true;
     this.context = this.canvas.getContext('2d');
     window.onresize = this.resize;
@@ -29,7 +29,7 @@ var Screen = function() {
     }
     this.controller.update(this, timeDiff);
     this.controller.draw(this);
-    return setTimeout(this.run, this.framerate / 1000);
+    return setTimeout(this.run, 1000/this.framerate);
   };
   Screen.prototype.resize = function() {
     this.size = new Vector(document.documentElement.clientWidth, document.documentElement.clientHeight);
